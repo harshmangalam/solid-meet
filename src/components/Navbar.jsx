@@ -1,17 +1,8 @@
 import { SiGooglemeet } from "solid-icons/si";
 import { BsDot } from "solid-icons/bs";
+import { showDate, showTime } from "../utils/dateTime";
 export default function Navbar() {
-  function showTime() {
-    return new Date().toLocaleString("en-US", {
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
-    });
-  }
-
-  function showDate() {
-    return new Date().toDateString();
-  }
+  
 
   return (
     <header className="bg-white px-2 md:px-0">
