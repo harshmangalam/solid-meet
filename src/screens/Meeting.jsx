@@ -1,7 +1,11 @@
 import { useParams } from "solid-app-router";
 import { RiSystemInformationLine } from "solid-icons/ri";
-import { FaSolidMicrophoneSlash, FaSolidMicrophone } from "solid-icons/fa";
-import { SiGooglemeet } from "solid-icons/si";
+import {
+  FaSolidMicrophoneSlash,
+  FaSolidMicrophone,
+  FaSolidUserAlt,
+} from "solid-icons/fa";
+import { FaSolidVideo, FaSolidVideoSlash } from "solid-icons/fa";
 import { FiShare } from "solid-icons/fi";
 import { ImPhoneHangUp } from "solid-icons/im";
 import { BsChatSquareTextFill } from "solid-icons/bs";
@@ -22,26 +26,40 @@ export default function Meeting() {
     setShowJoinDialog(false);
   }
 
-  const { store } = useMeet({ meetCode: params.meetCode });
+  const { store, toggleMic, toggleWebCam } = useMeet({
+    meetCode: params.meetCode,
+  });
 
   return (
     <div className="bg-gray-800">
       <div className="h-screen">
         <section className="h-5/6 container mx-auto flex justify-center items-center">
-          <div className="bg-gray-900 relative">
+          <div
+            classList={{ "bg-transparent": !store.webCam }}
+            className="bg-gray-900 relative"
+          >
             <Show
               when={store.remoteStream}
               fallback={
-                <div className="bg-gray-900 relative">
-                  <video
-                    autoPlay
-                    controls={false}
-                    playsInline
-                    use:getVideoSrc={store.currentStream}
-                    className="w-full h-full"
-                  ></video>
-                  <h6 className="font-bold text-sm  p-4 text-white">You</h6>
-                </div>
+                <Show
+                  when={store.webCam}
+                  fallback={
+                    <div className="p-16 rounded-full  bg-gray-700 text-white relative">
+                      <FaSolidUserAlt size={100} className="animate-bounce" />
+                    </div>
+                  }
+                >
+                  <div className="bg-gray-900 relative">
+                    <video
+                      autoPlay
+                      controls={false}
+                      playsInline
+                      use:getVideoSrc={store.currentStream}
+                      className="w-full h-full"
+                    ></video>
+                    <h6 className="font-bold text-sm  p-4 text-white">You</h6>
+                  </div>
+                </Show>
               }
             >
               <video
@@ -80,11 +98,31 @@ export default function Meeting() {
               <p>{params.meetCode}</p>
             </section>
             <section className="flex items-center justify-center gap-3">
-              <button className="text-white p-3 bg-gray-700/60 hover:bg-gray-600/70 rounded-full">
-                <FaSolidMicrophone size={20} />
+              <button
+                classList={{
+                  "bg-red-600/60 hover:bg-red-500/70 ": store.muted,
+                }}
+                className="text-white p-3 bg-gray-700/60 hover:bg-gray-600/70 rounded-full"
+                onClick={[toggleMic]}
+              >
+                {store.muted ? (
+                  <FaSolidMicrophoneSlash size={20} />
+                ) : (
+                  <FaSolidMicrophone size={20} />
+                )}
               </button>
-              <button className="text-white p-3 bg-gray-700/60 hover:bg-gray-600/70 rounded-full">
-                <SiGooglemeet size={20} />
+              <button
+                classList={{
+                  "bg-red-600/60 hover:bg-red-500/70 ": !store.webCam,
+                }}
+                className="text-white p-3 bg-gray-700/60 hover:bg-gray-600/70 rounded-full"
+                onClick={[toggleWebCam]}
+              >
+                {store.webCam ? (
+                  <FaSolidVideo size={20} />
+                ) : (
+                  <FaSolidVideoSlash size={20} />
+                )}
               </button>
               <button className="text-white p-3 bg-gray-700/60 hover:bg-gray-600/70 rounded-full">
                 <FiShare size={20} />

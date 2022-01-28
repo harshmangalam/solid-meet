@@ -14,6 +14,9 @@ export default function useMedia(params) {
 
     incommingCall: false,
     incommingPayload: null,
+
+    muted: false,
+    webCam: true,
   });
 
   onMount(async () => {
@@ -63,7 +66,7 @@ export default function useMedia(params) {
   async function requestMediaAccess() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        audio: false,
+        audio: true,
         video: {
           width: 1000,
           height: 600,
@@ -166,9 +169,24 @@ export default function useMedia(params) {
     setStore("remoteStream", e.streams[0]);
   }
 
+  function toggleMic() {
+    setStore("muted", !store.muted);
+    store.currentStream.getAudioTracks()[0].enabled =
+      !store.currentStream.getAudioTracks()[0].enabled;
+  }
+
+  function toggleWebCam() {
+    setStore("webCam", !store.webCam);
+    store.currentStream.getVideoTracks()[0].enabled =
+      !store.currentStream.getVideoTracks()[0].enabled;
+    console.log(store.currentStream.getVideoTracks()[0].enabled);
+  }
+
   return {
     store,
     requestPermissionAgain,
+    toggleMic,
+    toggleWebCam,
   };
 }
 
@@ -184,14 +202,3 @@ const iceServers = [
     credential: "98376683",
   },
 ];
-
-// [
-//   {
-//     urls: "stun:stun.stunprotocol.org",
-//   },
-//   {
-//     urls: "turn:numb.viagenie.ca",
-//     credential: "muazkh",
-//     username: "webrtc@live.com",
-//   },
-// ];
