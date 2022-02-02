@@ -1,4 +1,4 @@
-import { createSignal, For } from "solid-js";
+import { createSignal, For, Show } from "solid-js";
 import { IoPeople } from "solid-icons/io";
 import clickOutside from "../directives/clickOutside";
 import { IoClose } from "solid-icons/io";
@@ -37,8 +37,9 @@ export default function MeetingUsers(props) {
 
             <ul className="flex flex-col gap-3">
               <li>{props.store.currentUser} (You)</li>
-              <li>{props.store.remoteUser} (Remote)</li>
-             
+              <Show when={props.store.remoteUser}>
+                <li>{props.store.remoteUser} (Remote)</li>
+              </Show>
             </ul>
           </div>
         </div>

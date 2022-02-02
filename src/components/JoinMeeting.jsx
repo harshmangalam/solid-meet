@@ -24,8 +24,9 @@ export default function JoinMeeting() {
         />
       </div>
       <button
-        className="text-blue-500 hover:bg-blue-100 px-3 py-3 rounded font-bold"
+        className="text-blue-500 hover:bg-blue-100 px-3 py-3 rounded font-bold disabled:text-gray-500 disabled:hover:bg-gray-100 disabled:cursor-not-allowed"
         type="submit"
+        disabled={!meetCode().trim().length}
       >
         Join
       </button>

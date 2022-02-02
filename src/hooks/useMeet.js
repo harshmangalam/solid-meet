@@ -1,7 +1,10 @@
-import { onCleanup, onMount } from "solid-js";
+import { createEffect, onCleanup, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import io from "socket.io-client";
+import { useNavigate } from "solid-app-router";
 export default function useMedia(params) {
+  const navigate = useNavigate();
+
   const [store, setStore] = createStore({
     error: null,
     socket: null,
@@ -57,11 +60,8 @@ export default function useMedia(params) {
 
   onCleanup(() => {
     store.socket?.disconnect();
+    cleanUserMediaStream();
   });
-
-  async function requestPermissionAgain() {
-    await requestMediaAccess();
-  }
 
   async function requestMediaAccess() {
     try {
@@ -179,14 +179,22 @@ export default function useMedia(params) {
     setStore("webCam", !store.webCam);
     store.currentStream.getVideoTracks()[0].enabled =
       !store.currentStream.getVideoTracks()[0].enabled;
-    console.log(store.currentStream.getVideoTracks()[0].enabled);
+  }
+
+  function cleanUserMediaStream() {
+    store.currentStream.getTracks().forEach((track) => track.stop());
+  }
+
+  function endCall() {
+    navigate("/", { replace: true });
   }
 
   return {
     store,
-    requestPermissionAgain,
+
     toggleMic,
     toggleWebCam,
+    endCall,
   };
 }
 
