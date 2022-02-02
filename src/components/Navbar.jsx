@@ -9,11 +9,11 @@ export default function Navbar() {
       <nav className="container mx-auto flex items-center justify-between py-2">
         <h1 className="flex items-center gap-2">
           <SiGooglemeet size={32} className="text-blue-500" />
-          <span className="text-2xl">Solid Meet</span>
+          <span className="text-2xl hidden sm:block">Solid Meet</span>
         </h1>
 
         <div>
-          <time className="flex items-center gap-0 text-gray-500 text-xs md:text-xl">
+          <time className="flex items-center gap-0 text-gray-500 text-md md:text-xl">
             <span>{showTime()}</span>
             <BsDot size={24} color="#000000" />
             <span>{showDate()}</span>

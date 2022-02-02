@@ -1,6 +1,7 @@
 import JoinMeeting from "../../components/JoinMeeting";
 import NewMeeting from "../../components/NewMeeting";
 
+import videoMeetImg from "../../assets/video-call.svg"
 export default function Home() {
   return (
     <div className="my-16">
@@ -21,9 +22,9 @@ export default function Home() {
         </div>
         <div className="flex justify-center flex-none">
           <img
-            className="w-full h-full"
-            src="https://www.gstatic.com/meet/user_edu_get_a_link_light_90698cd7b4ca04d3005c962a3756c42d.svg"
-            alt="Get a link you can share"
+            className="w-96 h-96"
+            src={videoMeetImg}
+            alt="Solid Meet"
             role="img"
           ></img>
         </div>
