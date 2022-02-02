@@ -10,7 +10,7 @@ export default function MeetingUsers(props) {
     <>
       <button
         onClick={() => setShow(true)}
-        className="text-white p-3 hover:bg-gray-700/60 rounded-full"
+        className="text-white p-3 bg-gray-700/60 hover:bg-gray-600/70 rounded-full"
       >
         <IoPeople size={20} />
       </button>
