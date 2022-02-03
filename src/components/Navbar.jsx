@@ -5,15 +5,15 @@ export default function Navbar() {
   
 
   return (
-    <header className="bg-white px-2 md:px-0">
+    <header className="bg-gray-800 px-2 md:px-0 py-2">
       <nav className="container mx-auto flex items-center justify-between py-2">
         <h1 className="flex items-center gap-2">
           <FaSolidVideo size={32} className="text-blue-500" />
-          <span className="text-2xl hidden sm:block">Solid Meet</span>
+          <span className="text-2xl">Solid Meet</span>
         </h1>
 
-        <div>
-          <time className="flex items-center gap-0 text-gray-500 text-md md:text-xl">
+        <div className="hidden sm:block">
+          <time className="flex items-center gap-0 text-gray-300 md:text-lg">
             <span>{showTime()}</span>
             <BsDot size={24} color="#000000" />
             <span>{showDate()}</span>
