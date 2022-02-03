@@ -15,7 +15,7 @@ export default function Navbar() {
         <div className="hidden sm:block">
           <time className="flex items-center gap-0 text-gray-300 md:text-lg">
             <span>{showTime()}</span>
-            <BsDot size={24} color="#000000" />
+            <BsDot size={24} />
             <span>{showDate()}</span>
           </time>
         </div>

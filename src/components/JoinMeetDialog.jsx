@@ -34,13 +34,13 @@ export default function JoinMeetDialog() {
 
             <div className="my-2 bg-gray-600 rounded py-2 px-2 flex flex-col md:flex-row items-center gap-2">
               <code className="text-sm text-clip">
-                http://localhost:3000/{params.meetCode}
+                {location.origin}/{params.meetCode}
               </code>
               <button
                 className="rounded-full hover:bg-gray-700 p-2"
                 onClick={[
                   copyToClipboard,
-                  `http://localhost:3000/${params.meetCode}`,
+                  `${location.origin}/${params.meetCode}`,
                 ]}
               >
                 <RiDocumentFileCopyLine size={20} />

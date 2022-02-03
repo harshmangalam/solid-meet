@@ -5,7 +5,7 @@ export default function Mic(props) {
   return (
     <button
       classList={{
-        "bg-red-600/60 hover:bg-red-500/70 ": props.muted,
+        "bg-red-600 hover:bg-red-500": props.muted,
       }}
       className="text-white p-3 bg-gray-700/60 hover:bg-gray-600/70 rounded-full"
       onClick={[props.toggleMic]}

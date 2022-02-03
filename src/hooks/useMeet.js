@@ -1,4 +1,4 @@
-import {  onCleanup, onMount } from "solid-js";
+import { onCleanup, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import io from "socket.io-client";
 import { useNavigate, useParams } from "solid-app-router";
@@ -30,7 +30,7 @@ export default function useMeet() {
   });
 
   onMount(() => {
-    const socket = io("http://localhost:4000");
+    const socket = io(import.meta.env.VITE_API_ENDPOINT);
 
     setStore("socket", socket);
 
@@ -123,8 +123,8 @@ export default function useMeet() {
       })
       .then(() => {
         const payload = {
-          target: socketId,
-          caller: store.currentUser,
+          to: socketId,
+          from: store.currentUser,
           sdp: store.peer.localDescription,
         };
         store.socket.emit("offer", payload);
@@ -150,8 +150,8 @@ export default function useMeet() {
       })
       .then(() => {
         const payload = {
-          target: data.caller,
-          caller: store.currentUser,
+          to: data.from,
+          from: store.currentUser,
           sdp: peer.localDescription,
         };
         store.socket.emit("answer", payload);
@@ -166,7 +166,7 @@ export default function useMeet() {
   function handleICECandidateEvent(e) {
     if (e.candidate) {
       const payload = {
-        target: store.remoteUser,
+        to: store.remoteUser,
         candidate: e.candidate,
       };
       store.socket.emit("ice-candidate", payload);

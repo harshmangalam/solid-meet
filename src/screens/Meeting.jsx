@@ -11,6 +11,7 @@ import WebCam from "../components/WebCam";
 import Mic from "../components/Mic";
 import Stream from "../components/Stream";
 import Avatar from "../components/Avatar";
+import Alert from "../components/Alert";
 
 export default function Meeting() {
   const { store, toggleMic, toggleWebCam, endCall } = useMeet();
@@ -80,6 +81,13 @@ export default function Meeting() {
         </div>
       </Show>
       <JoinMeetDialog />
+
+      <Show when={store.remoteMuted}>
+        <Alert text="Remote Muted" />
+      </Show>
+      <Show when={store.muted}>
+        <Alert text="You Muted" />
+      </Show>
     </>
   );
 }
