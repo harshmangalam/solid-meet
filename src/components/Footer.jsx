@@ -4,9 +4,9 @@ import { FaBrandsDev } from "solid-icons/fa";
 import { For } from "solid-js";
 export default function Footer() {
   return (
-    <footer className="md:absolute bottom-0 w-full py-4 bg-gray-100">
+    <footer className="md:absolute bottom-0 w-full py-4 bg-gray-800">
       <div className="container mx-auto px-2 md:px-0 flex flex-col gap-3 items-center md:flex-row justify-between">
-        <h6 className="text-xl font-bold">Solid Meet</h6>
+        <h6 className="text-xl">Solid Meet</h6>
         <p className="inline-flex items-center flex-wrap text-md justify-center gap-2">
           <span>Made open source </span>
           <a
@@ -19,7 +19,7 @@ export default function Footer() {
           <AiFillHeart color="tomato" size={20} />
           <span>By</span>
           <a
-            href="https://github.com/harshmangalam/solid-meet"
+            href="https://github.com/harshmangalam"
             target={"_blank"}
             className="font-semibold"
           >

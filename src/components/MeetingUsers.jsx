@@ -20,22 +20,18 @@ export default function MeetingUsers(props) {
           className="absolute top-0 right-0 max-full p-4"
           use:clickOutside={() => setShow(false)}
         >
-          <div className="bg-white shadow rounded-lg px-3 py-4">
+          <div className="bg-gray-700 shadow rounded-lg px-3 py-4">
             <div className="flex items-center justify-between">
               <h6 className="text-lg">People</h6>
               <button
                 onClick={[setShow, false]}
-                className="rounded-full hover:bg-gray-100 p-2"
+                className="rounded-full hover:bg-gray-600 p-2"
               >
                 <IoClose size={20} />
               </button>
             </div>
 
-            <div className="my-2">
-              <p className="text-gray-600 text-sm">In Call</p>
-            </div>
-
-            <ul className="flex flex-col gap-3">
+            <ul className="flex flex-col gap-3 py-4">
               <li>{props.currentUser} (You)</li>
               <Show when={props.remoteUser}>
                 <li>{props.remoteUser} (Remote)</li>
