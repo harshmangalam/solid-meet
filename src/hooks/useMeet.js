@@ -1,9 +1,10 @@
-import { createEffect, onCleanup, onMount } from "solid-js";
+import {  onCleanup, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import io from "socket.io-client";
-import { useNavigate } from "solid-app-router";
-export default function useMedia(params) {
+import { useNavigate, useParams } from "solid-app-router";
+export default function useMeet() {
   const navigate = useNavigate();
+  const params = useParams();
 
   const [store, setStore] = createStore({
     error: null,
@@ -14,6 +15,8 @@ export default function useMedia(params) {
 
     remoteStream: null,
     remoteUser: null,
+    remoteMuted: false,
+    remoteWebCam: true,
 
     incommingCall: false,
     incommingPayload: null,
@@ -56,11 +59,21 @@ export default function useMedia(params) {
     store.socket.on("answer", handleAnswer);
 
     store.socket.on("ice-candidate", handleNewICECandidateMsg);
+
+    store.socket.on("remote-mic-toggle", (payload) => {
+      setStore("remoteMuted", payload.muted);
+    });
+    store.socket.on("remote-cam-toggle", (payload) => {
+      setStore("remoteWebCam", payload.webCam);
+    });
+
+    socket.on("call-end", () => {
+      endCall();
+    });
   });
 
   onCleanup(() => {
     store.socket?.disconnect();
-    cleanUserMediaStream();
   });
 
   async function requestMediaAccess() {
@@ -173,19 +186,38 @@ export default function useMedia(params) {
     setStore("muted", !store.muted);
     store.currentStream.getAudioTracks()[0].enabled =
       !store.currentStream.getAudioTracks()[0].enabled;
+
+    store.socket.emit("remote-mic-toggle", {
+      to: store.remoteUser,
+      from: store.currentUser,
+      muted: store.muted,
+    });
   }
 
   function toggleWebCam() {
     setStore("webCam", !store.webCam);
     store.currentStream.getVideoTracks()[0].enabled =
       !store.currentStream.getVideoTracks()[0].enabled;
+
+    store.socket.emit("remote-cam-toggle", {
+      to: store.remoteUser,
+      from: store.currentUser,
+      webCam: store.webCam,
+    });
   }
 
   function cleanUserMediaStream() {
-    store.currentStream.getTracks().forEach((track) => track.stop());
+    if (store.currentStream) {
+      store.currentStream.getTracks().forEach((track) => track.stop());
+    }
   }
 
   function endCall() {
+    cleanUserMediaStream();
+    store.socket.emit("call-end", {
+      from: store.currentUser,
+      to: store.remoteUser,
+    });
     navigate("/", { replace: true });
   }
 

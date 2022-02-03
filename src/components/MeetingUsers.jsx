@@ -17,7 +17,7 @@ export default function MeetingUsers(props) {
 
       <Show when={show()}>
         <div
-          className="absolute top-0 right-0 w-2/6 p-4"
+          className="absolute top-0 right-0 max-full p-4"
           use:clickOutside={() => setShow(false)}
         >
           <div className="bg-white shadow rounded-lg px-3 py-4">
@@ -36,9 +36,9 @@ export default function MeetingUsers(props) {
             </div>
 
             <ul className="flex flex-col gap-3">
-              <li>{props.store.currentUser} (You)</li>
-              <Show when={props.store.remoteUser}>
-                <li>{props.store.remoteUser} (Remote)</li>
+              <li>{props.currentUser} (You)</li>
+              <Show when={props.remoteUser}>
+                <li>{props.remoteUser} (Remote)</li>
               </Show>
             </ul>
           </div>
