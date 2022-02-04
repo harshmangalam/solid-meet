@@ -232,13 +232,11 @@ export default function useMeet() {
 
 const iceServers = [
   {
-    urls: "stun:numb.viagenie.ca",
-    username: "sultan1640@gmail.com",
-    credential: "98376683",
+    urls: "stun:stun.stunprotocol.org",
   },
   {
     urls: "turn:numb.viagenie.ca",
-    username: "sultan1640@gmail.com",
-    credential: "98376683",
+    credential: "muazkh",
+    username: "webrtc@live.com",
   },
 ];

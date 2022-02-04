@@ -1,6 +1,6 @@
 import { FaSolidUser, FaSolidUserAlt } from "solid-icons/fa";
 
-import { Match, Show, Switch } from "solid-js";
+import { createEffect, Match, Show, Switch } from "solid-js";
 import JoinMeetDialog from "../components/JoinMeetDialog";
 
 import useMeet from "../hooks/useMeet";
@@ -16,6 +16,7 @@ import Alert from "../components/Alert";
 export default function Meeting() {
   const { store, toggleMic, toggleWebCam, endCall } = useMeet();
 
+  createEffect(()=>console.log(store.remoteStream))
   return (
     <>
       <Show when={!store.error} fallback={<Error error={store.error} />}>
