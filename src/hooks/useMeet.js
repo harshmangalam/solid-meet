@@ -52,6 +52,7 @@ export default function useMeet() {
     });
 
     store.socket.on("offer", (data) => {
+      console.info("incomming remote offer:-",data)
       setStore("incommingCall", true);
       setStore("incommingPayload", data);
     });
@@ -77,6 +78,7 @@ export default function useMeet() {
   });
 
   async function requestMediaAccess() {
+    console.info("request media access permission");
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
@@ -85,34 +87,36 @@ export default function useMeet() {
           height: 480,
         },
       });
+      console.info("media connected successfully.");
+
       setStore("currentStream", stream);
 
       if (store.incommingCall) {
         handleRecieveCall(store.incommingPayload);
       }
     } catch (error) {
+      console.error("media access permission error:-", error);
       setStore("error", { name: error.name, message: error.message });
     }
   }
 
   function createPeer(socketId) {
+    console.info("create new peer");
     const peer = new RTCPeerConnection({
       iceServers: [
         {
-          urls: "stun2.l.google.com:19302",
+          urls: "stun:numb.viagenie.ca",
         },
         {
-          urls: "turn:relay.backups.cz",
-          credential: "webrtc",
-          username: "webrtc",
-        },
-        {
-          urls: "turn:relay.backups.cz?transport=tcp",
-          credential: "webrtc",
-          username: "webrtc",
+          urls: "turn:numb.viagenie.ca",
+          username: "harshdev8218@gmail.com",
+          credentialType: "password",
+          credential: "numbDev@2022",
         },
       ],
     });
+
+    console.info("peer created successfully");
     setStore("peer", peer);
 
     peer.onicecandidate = handleICECandidateEvent;
@@ -123,16 +127,21 @@ export default function useMeet() {
   }
 
   function callUser(soketId) {
+    console.info("start new call");
     store.peer = createPeer(soketId);
     store.currentStream
       .getTracks()
       .forEach((track) => store.peer.addTrack(track, store.currentStream));
+
+    console.info("added your  media stream tracks into peer");
   }
 
   function handleNegotiationNeededEvent(socketId) {
+    console.info("create new offer");
     store.peer
       .createOffer()
       .then((offer) => {
+        console.info("offer  created successfully.");
         return store.peer.setLocalDescription(offer);
       })
       .then(() => {
@@ -143,10 +152,13 @@ export default function useMeet() {
         };
         store.socket.emit("offer", payload);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        console.error("create offer error:-", e);
+      });
   }
 
   function handleRecieveCall(data) {
+    console.log("receive incomming call")
     const peer = createPeer();
     const desc = new RTCSessionDescription(data.sdp);
     peer
@@ -157,9 +169,11 @@ export default function useMeet() {
           .forEach((track) => peer.addTrack(track, store.currentStream));
       })
       .then(() => {
+        console.info("create answer")
         return peer.createAnswer();
       })
       .then((answer) => {
+        console.info("answer created successfully:-",answer)
         return peer.setLocalDescription(answer);
       })
       .then(() => {
@@ -169,16 +183,20 @@ export default function useMeet() {
           sdp: peer.localDescription,
         };
         store.socket.emit("answer", payload);
+        console.info("sent answer to remote.")
       });
   }
 
   function handleAnswer(data) {
+    console.log("remote answer:-", data);
     const desc = new RTCSessionDescription(data.sdp);
     store.peer.setRemoteDescription(desc).catch((e) => console.log(e));
   }
 
   function handleICECandidateEvent(e) {
+    console.info("gathering your ice candidate")
     if (e.candidate) {
+      console.log("your ice-candidate:-", e.candidate);
       const payload = {
         to: store.remoteUser,
         candidate: e.candidate,
@@ -188,11 +206,13 @@ export default function useMeet() {
   }
 
   function handleNewICECandidateMsg(data) {
+    console.log("incomming remote ice-candidate:-", data.candidate);
     const candidate = new RTCIceCandidate(data.candidate);
     store.peer?.addIceCandidate(candidate).catch((e) => console.log(e));
   }
 
   function handleTrackEvent(e) {
+    console.info("incomming remote stream", e.streams);
     setStore("remoteStream", e.streams[0]);
   }
 

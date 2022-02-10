@@ -16,7 +16,6 @@ import Alert from "../components/Alert";
 export default function Meeting() {
   const { store, toggleMic, toggleWebCam, endCall } = useMeet();
 
-  createEffect(()=>console.log(store.remoteStream))
   return (
     <>
       <Show when={!store.error} fallback={<Error error={store.error} />}>
