@@ -81,8 +81,8 @@ export default function useMeet() {
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
         video: {
-          width: 1000,
-          height: 600,
+          width: 640,
+          height: 480,
         },
       });
       setStore("currentStream", stream);
@@ -97,7 +97,21 @@ export default function useMeet() {
 
   function createPeer(socketId) {
     const peer = new RTCPeerConnection({
-      iceServers,
+      iceServers: [
+        {
+          urls: "stun2.l.google.com:19302",
+        },
+        {
+          urls: "turn:relay.backups.cz",
+          credential: "webrtc",
+          username: "webrtc",
+        },
+        {
+          urls: "turn:relay.backups.cz?transport=tcp",
+          credential: "webrtc",
+          username: "webrtc",
+        },
+      ],
     });
     setStore("peer", peer);
 
@@ -229,14 +243,3 @@ export default function useMeet() {
     endCall,
   };
 }
-
-const iceServers = [
-  {
-    urls: "stun:stun.stunprotocol.org",
-  },
-  {
-    urls: "turn:numb.viagenie.ca",
-    credential: "muazkh",
-    username: "webrtc@live.com",
-  },
-];
